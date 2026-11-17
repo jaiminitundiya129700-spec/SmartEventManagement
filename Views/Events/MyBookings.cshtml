@@ -1,0 +1,11 @@
+@model List<Registration>
+@{ ViewData["Title"] = "My Bookings"; }
+<div class="wrap pb-5"><div class="page-head"><h2>My Bookings</h2><p>Your tickets and registrations</p></div>
+@if (!Model.Any()) { <div class="panel text-center text-muted py-5"><i class="bi bi-ticket-perforated fs-1"></i><p class="mt-2">You haven't booked anything yet.</p><a class="btn btn-brand" asp-action="Index">Explore events</a></div> }
+else { <div class="panel p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th class="ps-4">Event</th><th>Date</th><th>Venue</th><th>Tickets</th><th>Booked on</th><th class="pe-4"></th></tr></thead><tbody>
+@foreach (var r in Model) {
+<tr><td class="ps-4"><a asp-action="Details" asp-route-id="@r.EventId" class="fw-bold text-reset">@r.Event.Title</a></td><td>@r.Event.Date.ToString("dd MMM yyyy, hh:mm tt")</td><td>@r.Event.Venue</td><td>@r.Tickets</td><td>@r.RegisteredOn.ToString("dd MMM yyyy")</td>
+<td class="pe-4 text-end"><form asp-action="Cancel" method="post" onsubmit="return confirm('Cancel this booking?')"><input type="hidden" name="id" value="@r.Id"><input type="hidden" name="eventId" value="@r.EventId"><button class="btn btn-sm btn-line text-danger">Cancel</button></form></td></tr> }
+</tbody></table></div></div> }
+</div>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@ViewData["Title"] | EventSphere</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+</head><body>
+<nav class="navbar navbar-expand-lg site-nav"><div class="wrap d-flex w-100 align-items-center">
+  <a class="brand" asp-controller="Home" asp-action="Index"><i class="bi bi-calendar2-heart"></i>EventSphere</a>
+  <button class="navbar-toggler border-0 ms-auto" data-bs-toggle="collapse" data-bs-target="#nv"><span class="navbar-toggler-icon"></span></button>
+  <div class="collapse navbar-collapse" id="nv">
+    <div class="navbar-nav mx-auto">
+      <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+      <a class="nav-link" asp-controller="Events" asp-action="Index">Explore Events</a>
+      <a class="nav-link" href="/#how">How it works</a>
+      @if (User.IsInRole("Admin")) {
+        <a class="nav-link" asp-controller="Events" asp-action="Manage">Organizer Panel</a>
+        <a class="nav-link" asp-controller="Admin" asp-action="Bookings">Bookings</a>
+        <a class="nav-link" asp-controller="Admin" asp-action="Users">Users</a>
+      } else if (User.Identity.IsAuthenticated) {
+        <a class="nav-link" asp-controller="Events" asp-action="MyBookings">My Bookings</a>
+      }
+    </div>
+    @if (User.Identity.IsAuthenticated) {
+      <div class="d-flex align-items-center gap-2">
+        <span class="small fw-semibold"><i class="bi bi-person-circle me-1"></i>@User.Identity.Name @if (User.IsInRole("Admin")) { <span class="badge text-bg-dark ms-1">Admin</span> }</span>
+        @if (User.IsInRole("Admin")) { <a class="btn btn-brand" asp-controller="Events" asp-action="Create"><i class="bi bi-plus-lg me-1"></i>Create Event</a> }
+        <form asp-controller="Account" asp-action="Logout" method="post"><button class="btn btn-line">Logout</button></form>
+      </div>
+    } else {
+      <a class="btn btn-line me-2" asp-controller="Account" asp-action="Login">Log in</a>
+      <a class="btn btn-brand" asp-controller="Account" asp-action="Register">Sign up</a>
+    }
+  </div></div></nav>
+<main>
+@if (TempData["Msg"] != null || TempData["Err"] != null) {
+ <div class="wrap pt-3"><div class="alert @(TempData["Err"] != null ? "alert-danger" : "alert-success")"><i class="bi bi-info-circle me-2"></i>@(TempData["Err"] ?? TempData["Msg"])</div></div> }
+@RenderBody()
+</main>
+<footer><div class="wrap"><div class="row g-4">
+ <div class="col-lg-4"><div class="brand text-white mb-3"><i class="bi bi-calendar2-heart"></i>EventSphere</div><p>A smart platform to discover, host and manage events with real-time seat tracking and easy online registration.</p></div>
+ <div class="col-6 col-lg-2 offset-lg-2"><h6>Platform</h6><a asp-controller="Events" asp-action="Index">Explore Events</a><a asp-controller="Events" asp-action="Create">Host an Event</a><a asp-controller="Events" asp-action="Manage">Organizer Panel</a></div>
+ <div class="col-6 col-lg-2"><h6>Categories</h6><a href="/Events?category=Technical">Technical</a><a href="/Events?category=Cultural">Cultural</a><a href="/Events?category=Workshop">Workshops</a><a href="/Events?category=Sports">Sports</a></div>
+ <div class="col-lg-2"><h6>Built with</h6><a>ASP.NET Core MVC</a><a>Entity Framework</a><a>SQLite</a></div></div>
+ <div class="copy"><span>© @DateTime.Now.Year EventSphere. All rights reserved.</span><span>.NET Technologies Mini Project · Marwadi University</span></div></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body></html>

@@ -1,0 +1,15 @@
+@model LoginVm
+@{ ViewData["Title"] = "Log in"; }
+<div class="auth"><div class="auth-card">
+ <div class="logo"><i class="bi bi-box-arrow-in-right"></i></div>
+ <h2>Welcome back</h2><p class="text-muted">Log in to book events or manage the platform.</p>
+ <form asp-action="Login" method="post">
+  <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+  <input type="hidden" asp-for="ReturnUrl" />
+  <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" placeholder="you@example.com"></div>
+  <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" placeholder="Your password"></div>
+  <button class="btn btn-brand w-100 py-2">Log in</button>
+ </form>
+ <p class="text-center text-muted mt-3 mb-3">New here? <a asp-action="Register" class="fw-semibold">Create an account</a></p>
+ <div class="demo"><b>Demo logins</b><br>Admin: admin@eventsphere.com / Admin@123<br>User: student@eventsphere.com / Student@123</div>
+</div></div>

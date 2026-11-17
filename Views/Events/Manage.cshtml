@@ -1,0 +1,20 @@
+@model List<Event>
+@{ ViewData["Title"] = "Organizer Panel"; }
+<div class="wrap pb-5">
+<div class="page-head d-flex flex-wrap justify-content-between align-items-end gap-2"><div><h2>Organizer Panel</h2><p>Manage your events and track registrations</p></div>
+ <a class="btn btn-brand" asp-action="Create"><i class="bi bi-plus-lg me-1"></i>Create Event</a></div>
+<div class="row g-3 mb-4">
+ <div class="col-6 col-lg-3"><div class="kpi"><small>Total events</small><h3>@Model.Count</h3></div></div>
+ <div class="col-6 col-lg-3"><div class="kpi"><small>Upcoming</small><h3>@Model.Count(e => e.Date >= DateTime.Now)</h3></div></div>
+ <div class="col-6 col-lg-3"><div class="kpi"><small>Tickets sold</small><h3>@Model.Sum(e => e.SeatsTaken)</h3></div></div>
+ <div class="col-6 col-lg-3"><div class="kpi"><small>Revenue</small><h3>₹@Model.Sum(e => e.SeatsTaken * e.Price).ToString("0")</h3></div></div>
+</div>
+<div class="panel p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th class="ps-4">Event</th><th>Date</th><th>Venue</th><th>Booked</th><th>Status</th><th class="pe-4"></th></tr></thead><tbody>
+@foreach (var e in Model) {
+<tr><td class="ps-4"><b>@e.Title</b><br><small class="text-muted">@e.Category</small></td><td>@e.Date.ToString("dd MMM yyyy")</td><td>@e.Venue</td><td>@e.SeatsTaken / @e.Capacity</td><td>@e.Status</td>
+<td class="pe-4 text-end text-nowrap">
+ <a class="btn btn-sm btn-line" asp-action="Details" asp-route-id="@e.Id">View</a>
+ <a class="btn btn-sm btn-line" asp-action="Edit" asp-route-id="@e.Id">Edit</a>
+ <form asp-action="Delete" asp-route-id="@e.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this event?')"><button class="btn btn-sm btn-line text-danger">Delete</button></form></td></tr> }
+</tbody></table></div></div></div>

@@ -1,0 +1,35 @@
+@model List<Event>
+@{ ViewData["Title"] = "Discover Events"; var up = Model.Where(e => e.Date >= DateTime.Now).OrderBy(e => e.Date).ToList();
+   var cats = new[] { ("Technical","bi-cpu","t-blue"), ("Cultural","bi-music-note-beamed","t-pink"), ("Workshop","bi-tools","t-green"), ("Sports","bi-trophy","t-orange") }; }
+<section class="hero"><div class="wrap">
+  <div class="pill"><i class="bi bi-stars"></i> Smart event booking for your campus</div>
+  <h1>Find events you'll <span class="grad">love</span>. Book in seconds.</h1>
+  <p class="lead">Explore tech fests, concerts, workshops and sports meets happening around you, and reserve your seat instantly.</p>
+  <form asp-controller="Events" asp-action="Index" method="get" class="search">
+    <div><i class="bi bi-search"></i><input name="q" placeholder="Search events or venues"></div>
+    <div><i class="bi bi-grid"></i><select name="category"><option value="">All categories</option>@foreach (var c in cats) { <option>@c.Item1</option> }</select></div>
+    <button class="btn btn-brand">Search</button>
+  </form>
+  <div class="herostats">
+    <div><b>@Model.Count</b><span>Events hosted</span></div><div><b>@up.Count</b><span>Upcoming now</span></div>
+    <div><b>@Model.Sum(e => e.SeatsTaken)</b><span>Tickets booked</span></div></div>
+</div></section>
+<section class="blk pb-0"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow">Categories</div><h2>Browse by interest</h2></div></div>
+  <div class="row g-3">@foreach (var c in cats) {
+    <div class="col-6 col-lg-3"><a class="cat" href="/Events?category=@c.Item1"><div class="ci @c.Item3"><i class="bi @c.Item2"></i></div><div><b>@c.Item1</b><br><small>@Model.Count(e => e.Category == c.Item1) events</small></div></a></div> }
+  </div></div></section>
+<section class="blk"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow">Happening soon</div><h2>Upcoming events</h2></div><a class="btn btn-line" asp-controller="Events" asp-action="Index">View all <i class="bi bi-arrow-right"></i></a></div>
+  <div class="row g-4">@foreach (var e in up.Take(6)) { <div class="col-md-6 col-lg-4"><partial name="_EventCard" model="e" /></div> }</div>
+</div></section>
+<section class="blk pt-0" id="how"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow">Simple process</div><h2>How it works</h2></div></div>
+  <div class="row g-4">
+   <div class="col-md-4"><div class="step"><div class="n"><i class="bi bi-search"></i></div><h5>1. Discover</h5><p>Search or filter by category to find the event that fits you.</p></div></div>
+   <div class="col-md-4"><div class="step"><div class="n"><i class="bi bi-ticket-perforated"></i></div><h5>2. Reserve</h5><p>Enter your details and book tickets. Seats update live so there is no overbooking.</p></div></div>
+   <div class="col-md-4"><div class="step"><div class="n"><i class="bi bi-emoji-smile"></i></div><h5>3. Enjoy</h5><p>Show up and enjoy. Organizers track every registration in one panel.</p></div></div>
+  </div></div></section>
+<section class="blk pt-0"><div class="wrap"><div class="cta">
+  <div><h2>Ready to join the fun?</h2><p>Create a free account to book seats and manage all your tickets in one place.</p></div>
+  @if (User.IsInRole("Admin")) { <a class="btn" asp-controller="Events" asp-action="Create">Host an Event <i class="bi bi-arrow-right"></i></a> } else { <a class="btn" asp-controller="Account" asp-action="Register">Join Now <i class="bi bi-arrow-right"></i></a> }</div></div></section>

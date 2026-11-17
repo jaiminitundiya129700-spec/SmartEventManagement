@@ -1,0 +1,4 @@
+@model Event
+@{ ViewData["Title"] = "Edit Event"; }
+<div class="wrap pb-5"><div class="page-head"><h2>Edit event</h2><p>Update the details of <b>@Model.Title</b>.</p></div>
+<form asp-action="Edit" method="post" class="panel"><partial name="_Form" model="Model" /></form></div>

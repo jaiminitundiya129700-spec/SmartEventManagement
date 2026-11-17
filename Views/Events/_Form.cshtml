@@ -1,0 +1,13 @@
+@model Event
+
+<input type="hidden" asp-for="Id" />
+<div class="row g-3">
+ <div class="col-md-6"><label asp-for="Title" class="form-label"></label><input asp-for="Title" class="form-control"><span asp-validation-for="Title" class="text-danger"></span></div>
+ <div class="col-md-6"><label asp-for="Category" class="form-label"></label><input asp-for="Category" class="form-control" placeholder="Technical / Cultural / Sports"></div>
+ <div class="col-md-6"><label asp-for="Venue" class="form-label"></label><input asp-for="Venue" class="form-control"></div>
+ <div class="col-md-6"><label asp-for="Date" class="form-label"></label><input asp-for="Date" class="form-control" type="datetime-local"></div>
+ <div class="col-md-6"><label asp-for="Capacity" class="form-label"></label><input asp-for="Capacity" class="form-control"></div>
+ <div class="col-md-6"><label asp-for="Price" class="form-label"></label><input asp-for="Price" class="form-control"></div>
+ <div class="col-12"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="3"></textarea></div>
+</div>
+<button class="btn btn-brand mt-4">Save Event</button> <a class="btn btn-line mt-4" asp-action="Index">Cancel</a>

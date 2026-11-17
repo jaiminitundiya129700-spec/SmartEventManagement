@@ -1,0 +1,8 @@
+@model List<Registration>
+@{ ViewData["Title"] = "All Bookings"; }
+<div class="wrap pb-5"><div class="page-head"><h2>All Bookings</h2><p>@Model.Count registration(s) across all events</p></div>
+<div class="panel p-0"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th class="ps-4">Attendee</th><th>Email</th><th>Event</th><th>Tickets</th><th>Amount</th><th class="pe-4">Booked on</th></tr></thead><tbody>
+@foreach (var r in Model) {
+<tr><td class="ps-4 fw-semibold">@r.Name</td><td>@r.Email</td><td>@r.Event.Title</td><td>@r.Tickets</td><td>₹@((r.Tickets * r.Event.Price).ToString("0"))</td><td class="pe-4">@r.RegisteredOn.ToString("dd MMM yyyy, hh:mm tt")</td></tr> }
+</tbody></table></div></div></div>

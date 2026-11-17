@@ -1,0 +1,4 @@
+@model Event
+@{ ViewData["Title"] = "Create Event"; }
+<div class="wrap pb-5"><div class="page-head"><h2>Create a new event</h2><p>Fill in the details and publish it instantly.</p></div>
+<form asp-action="Create" method="post" class="panel"><partial name="_Form" model="Model" /></form></div>

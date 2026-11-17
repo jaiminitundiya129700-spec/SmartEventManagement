@@ -1,0 +1,14 @@
+@model Event
+@{ var pct = Model.Capacity == 0 ? 0 : Math.Min(100, Model.SeatsTaken * 100 / Model.Capacity);
+   var sc = Model.Status switch { "Open" => "s-open", "Filling Fast" => "s-filling", "Sold Out" => "s-sold", _ => "s-done" }; }
+<a asp-controller="Events" asp-action="Details" asp-route-id="@Model.Id" class="ev text-reset">
+  <div class="ev-top @Model.Theme"><i class="bi @Model.Icon"></i>
+    <div class="datebadge"><b>@Model.Date.ToString("dd")</b><span>@Model.Date.ToString("MMM").ToUpper()</span></div>
+    <span class="status @sc">● @Model.Status</span></div>
+  <div class="ev-body">
+    <div class="ev-cat">@Model.Category</div><h5>@Model.Title</h5>
+    <div class="meta"><span><i class="bi bi-clock"></i>@Model.Date.ToString("ddd, hh:mm tt")</span><span><i class="bi bi-geo-alt"></i>@Model.Venue</span></div>
+    <div class="bar"><i style="width:@(pct)%"></i></div>
+  </div>
+  <div class="ev-foot"><span class="price">@(Model.Price == 0 ? "Free" : "₹" + Model.Price.ToString("0")) <small>/ ticket</small></span><small class="text-muted">@Model.SeatsLeft seats left</small></div>
+</a>

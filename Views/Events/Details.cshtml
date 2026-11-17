@@ -1,0 +1,40 @@
+@model Event
+@{ ViewData["Title"] = Model.Title; var pct = Model.Capacity == 0 ? 0 : Math.Min(100, Model.SeatsTaken * 100 / Model.Capacity); }
+<div class="wrap py-4">
+<a asp-action="Index" class="text-muted"><i class="bi bi-arrow-left"></i> Back to events</a>
+<div class="row g-4 mt-1">
+ <div class="col-lg-8">
+  <div class="ev mb-4" style="display:block">
+   <div class="ev-top @Model.Theme" style="height:240px;font-size:7rem"><i class="bi @Model.Icon"></i>
+    <div class="datebadge"><b>@Model.Date.ToString("dd")</b><span>@Model.Date.ToString("MMM").ToUpper()</span></div><span class="status">● @Model.Status</span></div>
+   <div class="p-4">
+    <div class="ev-cat">@Model.Category</div><h2 class="mt-1">@Model.Title</h2>
+    <div class="d-flex flex-wrap gap-4 meta my-3"><span><i class="bi bi-calendar-event"></i>@Model.Date.ToString("dddd, dd MMMM yyyy")</span><span><i class="bi bi-clock"></i>@Model.Date.ToString("hh:mm tt")</span><span><i class="bi bi-geo-alt"></i>@Model.Venue</span></div>
+    <h5>About this event</h5><p class="text-muted">@Model.Description</p>
+    <div class="bar"><i style="width:@(pct)%"></i></div>
+    <small class="text-muted">@Model.SeatsTaken booked · @Model.SeatsLeft seats left of @Model.Capacity</small>
+   </div></div>
+  @if (User.IsInRole("Admin")) {
+  <div class="panel"><h5 class="mb-3">Registered attendees (@Model.Registrations.Count)</h5>
+   <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Name</th><th>Email</th><th>Tickets</th><th></th></tr></thead><tbody>
+   @foreach (var r in Model.Registrations) {
+    <tr><td class="fw-semibold">@r.Name</td><td>@r.Email</td><td>@r.Tickets</td><td class="text-end">
+     <form asp-action="Cancel" method="post"><input type="hidden" name="id" value="@r.Id"><input type="hidden" name="eventId" value="@Model.Id"><button class="btn btn-sm btn-line text-danger">Cancel</button></form></td></tr> }
+   </tbody></table></div>
+   @if (!Model.Registrations.Any()) { <p class="text-muted m-0">No registrations yet.</p> }</div>
+  }
+ </div>
+ <div class="col-lg-4"><div class="panel sticky-side">
+  <div class="d-flex justify-content-between align-items-center mb-3"><h5 class="m-0">Reserve your seat</h5><span class="price">@(Model.Price == 0 ? "Free" : "₹" + Model.Price.ToString("0"))</span></div>
+  @if (User.Identity.IsAuthenticated) {
+  <form asp-action="Register" asp-route-id="@Model.Id" method="post">
+   <div class="mb-3"><label class="form-label">Full name</label><input name="Name" class="form-control" value="@User.Identity.Name" readonly></div>
+   <div class="mb-3"><label class="form-label">Email</label><input name="Email" class="form-control" value="@(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value)" readonly></div>
+   <div class="mb-3"><label class="form-label">Phone</label><input name="Phone" class="form-control" placeholder="Optional"></div>
+   <div class="mb-3"><label class="form-label">Tickets</label><input name="Tickets" type="number" min="1" max="10" value="1" class="form-control"></div>
+   <button class="btn btn-brand w-100 py-2">Book Now</button>
+  </form> } else {
+  <div class="text-center py-3"><i class="bi bi-lock fs-2 text-muted"></i><p class="text-muted mt-2">Please log in to book your seat.</p>
+   <a class="btn btn-brand w-100 mb-2" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path">Log in</a>
+   <a class="btn btn-line w-100" asp-controller="Account" asp-action="Register">Create account</a></div> }</div></div>
+</div></div>

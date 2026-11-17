@@ -1,0 +1,14 @@
+@model List<Event>
+@{ ViewData["Title"] = "Explore Events"; }
+<div class="wrap">
+<div class="page-head"><h2>Explore Events</h2><p>@Model.Count event(s) found</p></div>
+<form method="get" class="panel py-3 mb-4"><div class="row g-2">
+  <div class="col-md-6"><input name="q" value="@ViewBag.Q" class="form-control" placeholder="Search by title or venue"></div>
+  <div class="col-md-4"><select name="category" class="form-select"><option value="">All categories</option>
+    @foreach (string c in ViewBag.Categories) { <option value="@c" selected="@(c == ViewBag.Category)">@c</option> }</select></div>
+  <div class="col-md-2"><button class="btn btn-brand w-100"><i class="bi bi-search me-1"></i>Search</button></div>
+</div></form>
+<div class="row g-4 pb-5">
+@foreach (var e in Model) { <div class="col-md-6 col-lg-4"><partial name="_EventCard" model="e" /></div> }
+@if (!Model.Any()) { <div class="text-center text-muted py-5"><i class="bi bi-calendar-x fs-1"></i><p class="mt-2">No events match your search.</p></div> }
+</div></div>
